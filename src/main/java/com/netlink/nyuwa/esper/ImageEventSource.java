@@ -35,6 +35,9 @@ public class ImageEventSource implements InitializingBean {
     private EventSender eventSender;
 
     @Resource
+    private EPServiceProvider epServiceProvider;
+
+    @Resource
     private ImageRepository imageDao;
 
     public void sendImageEvent(){
@@ -48,10 +51,8 @@ public class ImageEventSource implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Configuration configuration = new Configuration();
-        configuration.addEventType(ImageEvent.class);
-        EPServiceProvider epServiceProvider = EPServiceProviderManager.getDefaultProvider(configuration);
         EPAdministrator epAdministrator = epServiceProvider.getEPAdministrator();
+        epAdministrator.getConfiguration().addEventType(ImageEvent.class);
         String epl = "select title, imageUrl, keywords "
                 + "from ImageEvent(title like '%头条女神%' and title not like '%爆乳%').win:length(3) "
                 + "where title like '%性感女神%' ";
