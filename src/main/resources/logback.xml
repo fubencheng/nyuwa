@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <property name="log.dir" value="/Users/ben/alidata1/admin/"/>
+
     <!--异常日志滚动配置-->
     <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -8,9 +12,9 @@
             <onMismatch>DENY</onMismatch>
             <onMatch>ACCEPT</onMatch>
         </filter>
-        <file>/alidata1/admin/logs/nyuwa/nyuwa_error.log</file>
+        <file>${log.dir}/logs/${appName}/${appName}_error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/alidata1/admin/logs/nyuwa/nyuwa_error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.dir}/logs/${appName}/${appName}_error.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>3</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -25,9 +29,9 @@
             <onMismatch>DENY</onMismatch>
             <onMatch>ACCEPT</onMatch>
         </filter>
-        <file>/alidata1/admin/logs/nyuwa/nyuwa_info.log</file>
+        <file>${log.dir}/logs/${appName}/${appName}a_info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/alidata1/admin/logs/nyuwa/nyuwa_info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.dir}/logs/${appName}/${appName}_info.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>3</maxHistory>
         </rollingPolicy>
         <encoder>

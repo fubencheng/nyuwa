@@ -13,10 +13,11 @@
  */
 package com.netlink.nyuwa.esper;
 
-import com.espertech.esper.client.EPServiceProvider;
+import com.espertech.esper.client.*;
 import com.netlink.nyuwa.dao.ImageRepository;
 import com.netlink.nyuwa.entity.ImageEntity;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,10 +30,9 @@ import java.util.List;
  * @version 0.0.1 2018-05-06 14:06 fubencheng.
  */
 @Component
-public class ImageEventSource {
+public class ImageEventSource implements InitializingBean {
 
-    @Resource
-    private EPServiceProvider epServiceProvider;
+    private EventSender eventSender;
 
     @Resource
     private ImageRepository imageDao;
@@ -42,8 +42,21 @@ public class ImageEventSource {
         for (ImageEntity imageEntity : imageEntityList){
             ImageEvent imageEvent = new ImageEvent();
             BeanUtils.copyProperties(imageEntity, imageEvent);
-            epServiceProvider.getEPRuntime().sendEvent(imageEvent);
+            eventSender.sendEvent(imageEvent);
         }
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Configuration configuration = new Configuration();
+        configuration.addEventType(ImageEvent.class);
+        EPServiceProvider epServiceProvider = EPServiceProviderManager.getDefaultProvider(configuration);
+        EPAdministrator epAdministrator = epServiceProvider.getEPAdministrator();
+        String epl = "select title, imageUrl, keywords "
+                + "from ImageEvent(title like '%头条女神%' and title not like '%爆乳%').win:length(3) "
+                + "where title like '%性感女神%' ";
+        EPStatement epStatement = epAdministrator.createEPL(epl);
+        epStatement.addListener(new ImageEventListener());
+        this.eventSender = epServiceProvider.getEPRuntime().getEventSender("ImageEvent");
+    }
 }
