@@ -13,24 +13,29 @@
  */
 package com.netlink.nyuwa.esper;
 
-import com.espertech.esper.client.EventBean;
-import com.espertech.esper.client.UpdateListener;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.annotation.Resource;
 
 /**
- * LogEventListener.
+ * ErrorEventSourceTest.
  *
  * @author fubencheng.
- * @version 0.0.1 2018-05-20 20:08 fubencheng.
+ * @version 0.0.1 2018-05-06 14:18 fubencheng.
  */
-public class LogEventListener implements UpdateListener {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ErrorEventSourceTest {
 
-    @Override
-    public void update(EventBean[] newEvents, EventBean[] oldEvents) {
-        String appName = newEvents[0].get("appName").toString();
-        String level = newEvents[0].get("level").toString();
-        String ip = newEvents[0].get("ip").toString();
-        String message = newEvents[0].get("message").toString();
-        System.out.println(String.format("--->appName=%s, level=%s, ip=%s, message=%s", appName, level, ip, message));
+    @Resource
+    private ErrorEventSource errorEventSource;
+
+    @Test
+    public void testSendLogEvent(){
+        errorEventSource.sendLogEvent();
     }
 
 }
