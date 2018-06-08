@@ -13,14 +13,13 @@
  */
 package com.netlink.nyuwa.esper;
 
-import com.espertech.esper.client.EPAdministrator;
-import com.espertech.esper.client.EPServiceProvider;
-import com.espertech.esper.client.EPStatement;
-import com.espertech.esper.client.EventSender;
+import com.espertech.esper.client.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ErrorEventSource.
@@ -31,40 +30,57 @@ import javax.annotation.Resource;
 @Component
 public class ErrorEventSource implements InitializingBean {
 
-    private EventSender eventSender;
+    private EPRuntime epRuntime;
 
     @Resource
     private EPServiceProvider epServiceProvider;
 
     public void sendLogEvent(){
-        LogEvent logEvent = new LogEvent();
-        logEvent.setAppName(" caasplatform");
-        logEvent.setIp("10.253.5.249");
-        logEvent.setLevel("ERROR");
-        logEvent.setSource("microLog");
-        logEvent.setMessage("2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
-        eventSender.sendEvent(logEvent);
+        Map<String, Object> logEvent = new HashMap<>(18);
+        logEvent.put("appName", "caasplatform");
+        logEvent.put("ip", "10.253.5.249");
+        logEvent.put("level", "ERROR");
+        logEvent.put("source", "microLog");
+        logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
+        epRuntime.sendEvent(logEvent, "errorEvent");
 
-        logEvent.setAppName(" caasplatform");
-        logEvent.setIp("10.253.5.249");
-        logEvent.setLevel("ERROR");
-        logEvent.setSource("microLog");
-        logEvent.setMessage("2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
-        eventSender.sendEvent(logEvent);
+        logEvent.put("appName", "caasplatform");
+        logEvent.put("ip", "10.253.5.249");
+        logEvent.put("level", "ERROR");
+        logEvent.put("source", "microLog");
+        logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
+        epRuntime.sendEvent(logEvent, "errorEvent");
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         EPAdministrator epAdministrator = this.epServiceProvider.getEPAdministrator();
-        epAdministrator.getConfiguration().addEventType(LogEvent.class);
-        String epl = "select count(*),ip,appName,source,message  "
-                + "from LogEvent.win:time_batch(30 sec)  "
-                + "where level = 'ERROR'   "
-//                + "group by level  "
-                + "having count(*)=1  ";
+        Map<String, Object> eventType = new HashMap<>(16);
+        eventType.put("level", String.class);
+        eventType.put("appName", String.class);
+        eventType.put("source", String.class);
+        eventType.put("time", String.class);
+        eventType.put("message", String.class);
+        eventType.put("class", String.class);
+        eventType.put("ip", String.class);
+        eventType.put("hostname", String.class);
+        String eventName = "errorEvent";
+        epAdministrator.getConfiguration().addEventType(eventName, eventType);
+        String epl = "select ip,appName,source,message "
+                + "from errorEvent.win:time(30 sec) "
+                + "where level = 'ERROR' "
+                + "group by level "
+                + "having count(*)>=1 ";
         EPStatement epStatement = epAdministrator.createEPL(epl);
-        epStatement.addListener(new LogEventListener());
-        this.eventSender = epServiceProvider.getEPRuntime().getEventSender("LogEvent");
+        epStatement.addListener((newEvents, oldEvents) -> {
+            if (newEvents != null) {
+                System.out.println("new event length---------->" + newEvents.length);
+            }
+            if (oldEvents != null) {
+                System.out.println("old event length==========>" + oldEvents.length);
+            }
+        });
+        this.epRuntime = epServiceProvider.getEPRuntime();
     }
 
 }
