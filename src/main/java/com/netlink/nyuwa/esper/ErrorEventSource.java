@@ -42,14 +42,14 @@ public class ErrorEventSource implements InitializingBean {
         logEvent.put("level", "ERROR");
         logEvent.put("source", "microLog");
         logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
-        epRuntime.sendEvent(logEvent, "errorEvent");
+        epRuntime.sendEvent(logEvent, "error_event");
 
         logEvent.put("appName", "caasplatform");
         logEvent.put("ip", "10.253.5.249");
         logEvent.put("level", "ERROR");
         logEvent.put("source", "microLog");
         logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
-        epRuntime.sendEvent(logEvent, "errorEvent");
+        epRuntime.sendEvent(logEvent, "error_event");
     }
 
     @Override
@@ -64,22 +64,14 @@ public class ErrorEventSource implements InitializingBean {
         eventType.put("class", String.class);
         eventType.put("ip", String.class);
         eventType.put("hostname", String.class);
-        String eventName = "errorEvent";
-        epAdministrator.getConfiguration().addEventType(eventName, eventType);
+        epAdministrator.getConfiguration().addEventType("error_event", eventType);
         String epl = "select ip,appName,source,message "
-                + "from errorEvent.win:time(30 sec) "
+                + "from error_event.win:time_batch(30 sec) "
                 + "where level = 'ERROR' "
                 + "group by level "
                 + "having count(*)>=1 ";
         EPStatement epStatement = epAdministrator.createEPL(epl);
-        epStatement.addListener((newEvents, oldEvents) -> {
-            if (newEvents != null) {
-                System.out.println("new event length---------->" + newEvents.length);
-            }
-            if (oldEvents != null) {
-                System.out.println("old event length==========>" + oldEvents.length);
-            }
-        });
+        epStatement.addListener(new ErrorEventListener());
         this.epRuntime = epServiceProvider.getEPRuntime();
     }
 

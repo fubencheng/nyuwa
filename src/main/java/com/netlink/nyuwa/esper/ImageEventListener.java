@@ -25,16 +25,18 @@ import com.espertech.esper.client.UpdateListener;
 public class ImageEventListener implements UpdateListener {
 
     @Override
-    public void update(EventBean[] newEvent, EventBean[] oldEvent) {
-        System.out.println(String.format("new event size : %s", newEvent.length));
-        String title = (String) newEvent[0].get("title");
-        String imageUrl = (String) newEvent[0].get("imageUrl");
-        String keywords = (String ) newEvent[0].get("keywords");
-        System.out.println("--->" + title + "===>" + imageUrl + "***>" + keywords);
-        if (oldEvent != null){
-            String oldTitle = (String) newEvent[0].get("title");
-            String oldImageUrl = (String) newEvent[0].get("imageUrl");
-            String oldKeywords = (String ) newEvent[0].get("keywords");
+    public void update(EventBean[] newEvents, EventBean[] oldEvents) {
+        if (newEvents != null) {
+            System.out.println(String.format("new event size : %s", newEvents.length));
+            String title = (String) newEvents[0].get("title");
+            String imageUrl = (String) newEvents[0].get("imageUrl");
+            String keywords = (String) newEvents[0].get("keywords");
+            System.out.println("--->" + title + "===>" + imageUrl + "***>" + keywords);
+        }
+        if (oldEvents != null){
+            String oldTitle = (String) newEvents[0].get("title");
+            String oldImageUrl = (String) newEvents[0].get("imageUrl");
+            String oldKeywords = (String ) newEvents[0].get("keywords");
             System.out.println(">>>" + oldTitle + ">>>" + oldImageUrl + ">>>" + oldKeywords);
         }
     }

@@ -17,21 +17,23 @@ import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 
 /**
- * LogEventListener.
+ * BizLogEventListener.
  *
  * @author fubencheng.
  * @version 0.0.1 2018-05-20 20:08 fubencheng.
  */
-public class LogEventListener implements UpdateListener {
+public class BizLogEventListener implements UpdateListener {
 
     @Override
     public void update(EventBean[] newEvents, EventBean[] oldEvents) {
         if (newEvents != null) {
             String appName = newEvents[0].get("appName").toString();
-            String level = newEvents[0].get("level").toString();
-            String ip = newEvents[0].get("ip").toString();
-            String message = newEvents[0].get("message").toString();
-            System.out.println(String.format("--->appName=%s, level=%s, ip=%s, message=%s", appName, level, ip, message));
+            String methodName = newEvents[0].get("methodName").toString();
+            String packageName = newEvents[0].get("packageName").toString();
+            String time = newEvents[0].get("time").toString();
+            System.out.println(String.format("--->appName=%s, methodName=%s, packageName=%s, time=%s", appName, methodName, packageName, time));
+        } else {
+            System.out.println("no new event!!!");
         }
     }
 
