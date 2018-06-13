@@ -67,15 +67,15 @@ public class BizLogEventSource implements InitializingBean {
         bizlogEvent.put("ip", String.class);
         bizlogEvent.put("hostName", String.class);
         epAdministrator.getConfiguration().addEventType("bizlog_event", bizlogEvent);
-        String epl = "select max(costTime),appName,ip,packageName,hostName,creditApplyNo,apiType,source,time,methodName "
-                + "from bizlog_event.win:time_batch(60 sec) "
-                + "where packageName like  '%YZFTCBTServiceImpl%' "
-                + "having max(costTime)>10000";
-
 //        String epl = "select max(costTime),appName,ip,packageName,hostName,creditApplyNo,apiType,source,time,methodName "
-//                + "from bizlog_event.win:length_batch(1) "
+//                + "from bizlog_event.win:time_batch(60 sec) "
 //                + "where packageName like  '%YZFTCBTServiceImpl%' "
-//                + "having costTime > 10000";
+//                + "having max(costTime)>10000";
+
+        String epl = "select count(*),appName,ip,packageName,hostName,apiType,source,time,methodName "
+                + "from bizlog_event.win:length_batch(1) "
+                + "where packageName like  '%YZFTCBTServiceImpl%' "
+                + "and costTime > 10000 ";
         EPStatement epStatement = epAdministrator.createEPL(epl);
         epStatement.addListener(new BizLogEventListener());
         this.epRuntime = epServiceProvider.getEPRuntime();
