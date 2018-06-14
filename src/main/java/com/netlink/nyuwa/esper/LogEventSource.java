@@ -35,18 +35,18 @@ public class LogEventSource implements InitializingBean {
 
     public void sendLogEvent(){
         LogEvent logEvent = new LogEvent();
-        logEvent.setAppName("credit-core-cash-loan");
-        logEvent.setIp("10.253.22.134");
+        logEvent.setAppName("nyuwa");
+        logEvent.setIp("127.0.0.1");
         logEvent.setLevel("ERROR");
         logEvent.setSource("microLog");
-        logEvent.setMessage("2018-05-17 03:01:23,567 [HSFBizProcessor-4-thread-39] ERROR [com.netlink.creditcore.cashloan.apiImpl.LoanInnerApiImpl] [LoanInnerApiImpl.java:72] [5d6d8057-85e5-4130-bbc8-069093b0ef94] - generatePdf, java.lang.NullPointerException: null");
+        logEvent.setMessage("2018-05-17 03:01:23,567 [NyuwaProcessor-4-thread-39] ERROR [com.netlink.creditcore.cashloan.apiImpl.LoanInnerApiImpl] [LoanInnerApiImpl.java:72] [5d6d8057-85e5-4130-bbc8-069093b0ef94] - generatePdf, java.lang.NullPointerException: null");
         eventSender.sendEvent(logEvent);
 
-        logEvent.setAppName("credit-core-cash-loan");
-        logEvent.setIp("10.253.22.134");
+        logEvent.setAppName("nyuwa");
+        logEvent.setIp("127.0.0.1");
         logEvent.setLevel("ERROR");
         logEvent.setSource("microLog");
-        logEvent.setMessage("2018-05-17 03:01:23,567 [HSFBizProcessor-4-thread-39] ERROR [com.netlink.creditcore.cashloan.apiImpl.LoanInnerApiImpl] [LoanInnerApiImpl.java:72] [5d6d8057-85e5-4130-bbc8-069093b0ef94] - generatePdf, java.lang.NullPointerException: null");
+        logEvent.setMessage("2018-05-17 03:01:23,567 [NyuwaProcessor-4-thread-39] ERROR [com.netlink.creditcore.cashloan.apiImpl.LoanInnerApiImpl] [LoanInnerApiImpl.java:72] [5d6d8057-85e5-4130-bbc8-069093b0ef94] - generatePdf, java.lang.NullPointerException: null");
         eventSender.sendEvent(logEvent);
     }
 
