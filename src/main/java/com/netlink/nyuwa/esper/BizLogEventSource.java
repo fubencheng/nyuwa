@@ -67,6 +67,27 @@ public class BizLogEventSource implements InitializingBean {
         bizlogEvent.put("ip", String.class);
         bizlogEvent.put("hostName", String.class);
         epAdministrator.getConfiguration().addEventType("bizlog_event", bizlogEvent);
+
+        Map<String, Object> bizlogEventTemp = new HashMap<>(16);
+        bizlogEventTemp.put("appName", String.class);
+        bizlogEventTemp.put("source", String.class);
+        bizlogEventTemp.put("methodName", String.class);
+        bizlogEventTemp.put("packageName", String.class);
+        bizlogEventTemp.put("costTime", Long.class);
+        bizlogEventTemp.put("success", String.class);
+        bizlogEventTemp.put("creditApplyNo", String.class);
+        bizlogEventTemp.put("time", String.class);
+        bizlogEventTemp.put("apiType", String.class);
+        bizlogEventTemp.put("ip", String.class);
+        bizlogEventTemp.put("hostName", String.class);
+        bizlogEventTemp.put("fileName", String.class);
+        if (epAdministrator.getConfiguration().getEventType("bizlog_event") == null) {
+            epAdministrator.getConfiguration().addEventType("bizlog_event", bizlogEventTemp);
+        } else {
+            epAdministrator.getConfiguration().removeEventType("bizlog_event", true);
+            epAdministrator.getConfiguration().addEventType("bizlog_event", bizlogEventTemp);
+        }
+
 //        String epl = "select max(costTime),appName,ip,packageName,hostName,creditApplyNo,apiType,source,time,methodName "
 //                + "from bizlog_event.win:time_batch(60 sec) "
 //                + "where packageName like  '%YZFTCBTServiceImpl%' "
