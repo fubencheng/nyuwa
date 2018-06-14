@@ -41,14 +41,14 @@ public class ErrorEventSource implements InitializingBean {
         logEvent.put("ip", "10.253.5.249");
         logEvent.put("level", "ERROR");
         logEvent.put("source", "microLog");
-        logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
+        logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.nyuwa.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
         epRuntime.sendEvent(logEvent, "error_event");
 
         logEvent.put("appName", "caasplatform");
         logEvent.put("ip", "10.253.5.249");
         logEvent.put("level", "ERROR");
         logEvent.put("source", "microLog");
-        logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.zhonganinfo.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
+        logEvent.put("message", "2018-06-08 14:57:44,682 [Thread-0] ERROR [XXX] [gitlab.nyuwa.com/zis_stargate/caas-platform/controllers.(*QA_Controller).Hello:20] [trace=,span=,parent=,name=,app=,begintime=,endtime=] - Error:code=1, desc=结构体日志测试, reason=<nil>");
         epRuntime.sendEvent(logEvent, "error_event");
     }
 
