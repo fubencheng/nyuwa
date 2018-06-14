@@ -37,16 +37,16 @@ public class BizLogEventSource implements InitializingBean {
 
     public void sendLogEvent(){
         Map<String, Object> bizlogEvent = new HashMap<>(16);
-        bizlogEvent.put("appName", "northernlight");
+        bizlogEvent.put("appName", "nyuwa");
         bizlogEvent.put("source", "biz");
-        bizlogEvent.put("creditApplyNo", "36012018061317080196");
-        bizlogEvent.put("packageName", "com.zhongan.northernlight.service.impl.YZFTCBTServiceImpl");
+        bizlogEvent.put("creditApplyNo", "6228210670013821016");
+        bizlogEvent.put("packageName", "com.netlink.nyuwa.esper.BizLogEventSource");
         bizlogEvent.put("costTime", 10096);
         bizlogEvent.put("success", Boolean.TRUE.toString());
         bizlogEvent.put("time", "2018-06-13T10:14:17.017+08:00");
-        bizlogEvent.put("apiType", "HSF-CAI");
+        bizlogEvent.put("apiType", "NYUWA");
         bizlogEvent.put("methodName", "apply");
-        bizlogEvent.put("ip", "10.253.17.236");
+        bizlogEvent.put("ip", "127.0.0.1");
         bizlogEvent.put("hostName", "iZ23jrnx628Z");
         this.epRuntime.sendEvent(bizlogEvent, "bizlog_event");
     }
